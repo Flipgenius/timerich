@@ -15,7 +15,7 @@ export default function PlannerAI() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer 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`,
+          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_KEY}`,
         },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
