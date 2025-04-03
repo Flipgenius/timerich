@@ -27,7 +27,8 @@ export default function PlanHistory() {
       const results: Plan[] = [];
 
       snapshot.forEach((doc) => {
-        results.push({ id: doc.id, ...(doc.data() as Plan) });
+        const data = doc.data() as Omit<Plan, "id">;
+        results.push({ ...data, id: doc.id });
       });
 
       setPlans(results);
