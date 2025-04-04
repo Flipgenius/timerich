@@ -1,3 +1,5 @@
+# TimeRich — Deployed to usetimerich.com
+
 # TimeRich – AI Calendar & Productivity Coach
 
 # React + TypeScript + Vite
