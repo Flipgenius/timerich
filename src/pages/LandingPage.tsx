@@ -9,6 +9,7 @@ export default function LandingPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("idle");
+
     try {
       await addDoc(collection(db, "waitlist"), {
         email,
@@ -17,10 +18,13 @@ export default function LandingPage() {
       setStatus("success");
       setEmail("");
     } catch (error) {
-      console.error("Failed to submit:", error);
+      console.error("Error adding email to waitlist:", error);
       setStatus("error");
     }
   };
+
+  // ... rest of your component here ...
+}
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex flex-col justify-center items-center px-6">
