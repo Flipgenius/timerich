@@ -16,11 +16,12 @@ function App() {
   const [user, setUser] = useState<User | null | undefined>(undefined);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsub();
-  }, []);
+  const unsub = onAuthStateChanged(auth, (currentUser) => {
+    console.log("User is:", currentUser);
+    setUser(currentUser);
+  });
+  return () => unsub();
+}, []);
 
   if (user === undefined) return <p className="p-4">Loading...</p>;
 
