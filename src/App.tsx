@@ -17,10 +17,17 @@ function App() {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (currentUser) => {
+      console.log("Auth user state:", currentUser);
       setUser(currentUser);
     });
     return () => unsub();
   }, []);
+
+  // ✅ TEMPORARY logout for testing unauthenticated state
+  if (user) {
+    console.log("🧹 Forcing logout for public landing page test...");
+    auth.signOut();
+  }
 
   if (user === undefined) return <p className="p-6 text-center">Loading...</p>;
 
