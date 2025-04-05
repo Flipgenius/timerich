@@ -1,3 +1,5 @@
+# Update for landing page deployment
+
 # TimeRich — Deployed to usetimerich.com
 
 # TimeRich – AI Calendar & Productivity Coach
