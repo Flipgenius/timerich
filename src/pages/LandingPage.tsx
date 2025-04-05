@@ -23,8 +23,19 @@ export default function LandingPage() {
     }
   };
 
-  // ... rest of your component here ...
-}
+  if (status === "success") {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex items-center justify-center text-center px-6">
+        <div>
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">🎉 You're on the Waitlist!</h1>
+          <p className="text-lg text-gray-700 mb-8">
+            You’ll be among the first to experience TimeRich — the AI planner that helps you live with purpose.
+          </p>
+          <p className="text-sm text-gray-500">We'll notify you as soon as we launch. Thank you!</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex flex-col justify-center items-center px-6">
@@ -54,9 +65,6 @@ export default function LandingPage() {
           </button>
         </form>
 
-        {status === "success" && (
-          <p className="text-green-600 font-medium">You're on the list! 🎉</p>
-        )}
         {status === "error" && (
           <p className="text-red-500 font-medium">Something went wrong. Try again.</p>
         )}
