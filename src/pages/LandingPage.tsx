@@ -11,39 +11,35 @@ export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null);
-  const [animatedCount, setAnimatedCount] = useState(0);
-  const animationFrameRef = useRef<number>();
+  const [animatedCount, setAnimatedCount] = useState<number>(0);
+  const animationFrame = useRef<number>();
 
   useEffect(() => {
     const fetchCount = async () => {
-      try {
-        const snapshot = await getCountFromServer(collection(db, "waitlist"));
-        setWaitlistCount(snapshot.data().count);
-      } catch (error) {
-        console.error("❌ Failed to load waitlist count:", error);
-      }
+      const snapshot = await getCountFromServer(collection(db, "waitlist"));
+      const count = snapshot.data().count;
+      setWaitlistCount(count);
     };
     fetchCount();
   }, []);
 
   useEffect(() => {
     if (waitlistCount !== null) {
-      let start = 0;
-      const duration = 1000;
-      const startTime = performance.now();
+      let startTime = performance.now();
+      let duration = 800;
 
-      const animate = (currentTime: number) => {
-        const progress = Math.min((currentTime - startTime) / duration, 1);
-        const eased = Math.floor(progress * waitlistCount);
-        setAnimatedCount(eased);
+      const animate = (time: number) => {
+        const elapsed = time - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const current = Math.floor(progress * waitlistCount);
+        setAnimatedCount(current);
         if (progress < 1) {
-          animationFrameRef.current = requestAnimationFrame(animate);
+          animationFrame.current = requestAnimationFrame(animate);
         }
       };
 
-      animationFrameRef.current = requestAnimationFrame(animate);
-
-      return () => cancelAnimationFrame(animationFrameRef.current!);
+      cancelAnimationFrame(animationFrame.current!);
+      animationFrame.current = requestAnimationFrame(animate);
     }
   }, [waitlistCount]);
 
@@ -145,10 +141,14 @@ export default function LandingPage() {
 
         {waitlistCount !== null ? (
           <p className="text-gray-500 mb-4 text-sm">
-            🎉 <span className="font-medium">{animatedCount}</span> people have already joined the waitlist!
+            🎉{" "}
+            <span className="font-medium">{animatedCount}</span> people have
+            already joined the waitlist!
           </p>
         ) : (
-          <p className="text-gray-400 mb-4 text-sm italic">Loading waitlist size...</p>
+          <p className="text-gray-400 mb-4 text-sm italic">
+            Loading waitlist size...
+          </p>
         )}
 
         <form
