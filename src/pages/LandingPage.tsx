@@ -24,14 +24,59 @@ export default function LandingPage() {
   };
 
   if (status === "success") {
+    const shareText = encodeURIComponent(
+      "🔥 I just joined the TimeRich waitlist! An AI planner to help me live with purpose. Join me:"
+    );
+    const shareUrl = encodeURIComponent("https://usetimerich.com");
+
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex items-center justify-center text-center px-6">
         <div>
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">🎉 You're on the Waitlist!</h1>
-          <p className="text-lg text-gray-700 mb-8">
+          <p className="text-lg text-gray-700 mb-6">
             You’ll be among the first to experience TimeRich — the AI planner that helps you live with purpose.
           </p>
-          <p className="text-sm text-gray-500">We'll notify you as soon as we launch. Thank you!</p>
+
+          <p className="text-md font-medium text-gray-800 mb-2">Want early access sooner?</p>
+          <p className="text-gray-600 mb-6">Share TimeRich with your friends:</p>
+
+          <div className="flex justify-center flex-wrap gap-4 mb-6">
+            <a
+              href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Share on Twitter
+            </a>
+
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
+            >
+              Share on Facebook
+            </a>
+
+            <a
+              href={`mailto:?subject=Join me on TimeRich!&body=Check out this AI-powered planner I'm using: ${shareUrl}`}
+              className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800"
+            >
+              Share via Email
+            </a>
+
+            <a
+              href={`https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            >
+              Share on WhatsApp
+            </a>
+          </div>
+
+          <p className="text-sm text-gray-500">Thank you for supporting TimeRich. We’ll be in touch soon!</p>
         </div>
       </div>
     );
@@ -72,4 +117,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
