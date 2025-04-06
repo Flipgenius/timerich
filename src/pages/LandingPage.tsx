@@ -42,12 +42,12 @@ export default function LandingPage() {
 
           <div className="flex justify-center flex-wrap gap-4 mb-6">
             <a
-              href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+              href={`https://x.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-black text-white px-4 py-2 rounded hover:bg-gray-900"
             >
-              Share on Twitter
+              Share on X
             </a>
 
             <a
