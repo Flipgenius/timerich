@@ -14,8 +14,12 @@ export default function LandingPage() {
 
   useEffect(() => {
     const fetchCount = async () => {
-      const snapshot = await getCountFromServer(collection(db, "waitlist"));
-      setWaitlistCount(snapshot.data().count);
+      try {
+        const snapshot = await getCountFromServer(collection(db, "waitlist"));
+        setWaitlistCount(snapshot.data().count);
+      } catch (error) {
+        console.error("❌ Failed to load waitlist count:", error);
+      }
     };
     fetchCount();
   }, []);
@@ -46,17 +50,12 @@ export default function LandingPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex items-center justify-center text-center px-6">
         <div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-            🎉 You're on the Waitlist!
-          </h1>
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">🎉 You're on the Waitlist!</h1>
           <p className="text-lg text-gray-700 mb-6">
-            You’ll be among the first to experience TimeRich — the AI planner
-            that helps you live with purpose.
+            You’ll be among the first to experience TimeRich — the AI planner that helps you live with purpose.
           </p>
 
-          <p className="text-md font-medium text-gray-800 mb-2">
-            Want early access sooner?
-          </p>
+          <p className="text-md font-medium text-gray-800 mb-2">Want early access sooner?</p>
           <p className="text-gray-600 mb-6">Share TimeRich with your friends:</p>
 
           <div className="flex justify-center flex-wrap gap-4 mb-6">
@@ -68,6 +67,7 @@ export default function LandingPage() {
             >
               Share on X
             </a>
+
             <a
               href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
               target="_blank"
@@ -76,12 +76,14 @@ export default function LandingPage() {
             >
               Share on Facebook
             </a>
+
             <a
               href={`mailto:?subject=Join me on TimeRich!&body=Check out this AI-powered planner I'm using: ${shareUrl}`}
               className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800"
             >
               Share via Email
             </a>
+
             <a
               href={`https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}`}
               target="_blank"
@@ -92,9 +94,7 @@ export default function LandingPage() {
             </a>
           </div>
 
-          <p className="text-sm text-gray-500">
-            Thank you for supporting TimeRich. We’ll be in touch soon!
-          </p>
+          <p className="text-sm text-gray-500">Thank you for supporting TimeRich. We’ll be in touch soon!</p>
         </div>
       </div>
     );
@@ -107,14 +107,16 @@ export default function LandingPage() {
           TimeRich
         </h1>
         <p className="text-xl text-gray-700 mb-6">
-          Become the master of your time with AI. TimeRich helps you build your
-          ideal week, avoid burnout, and live with purpose.
+          Become the master of your time with AI. TimeRich helps you build your ideal week,
+          avoid burnout, and live with purpose.
         </p>
 
-        {waitlistCount !== null && (
+        {waitlistCount !== null ? (
           <p className="text-gray-500 mb-4 text-sm">
             🎉 <span className="font-medium">{waitlistCount}</span> people have already joined the waitlist!
           </p>
+        ) : (
+          <p className="text-gray-400 mb-4 text-sm italic">Loading waitlist size...</p>
         )}
 
         <form
@@ -138,9 +140,7 @@ export default function LandingPage() {
         </form>
 
         {status === "error" && (
-          <p className="text-red-500 font-medium">
-            Something went wrong. Please try again.
-          </p>
+          <p className="text-red-500 font-medium">Something went wrong. Please try again.</p>
         )}
       </div>
     </div>
