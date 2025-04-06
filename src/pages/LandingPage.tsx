@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   collection,
   addDoc,
@@ -11,6 +11,8 @@ export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null);
+  const [animatedCount, setAnimatedCount] = useState(0);
+  const animationFrameRef = useRef<number>();
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -23,6 +25,27 @@ export default function LandingPage() {
     };
     fetchCount();
   }, []);
+
+  useEffect(() => {
+    if (waitlistCount !== null) {
+      let start = 0;
+      const duration = 1000;
+      const startTime = performance.now();
+
+      const animate = (currentTime: number) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        const eased = Math.floor(progress * waitlistCount);
+        setAnimatedCount(eased);
+        if (progress < 1) {
+          animationFrameRef.current = requestAnimationFrame(animate);
+        }
+      };
+
+      animationFrameRef.current = requestAnimationFrame(animate);
+
+      return () => cancelAnimationFrame(animationFrameRef.current!);
+    }
+  }, [waitlistCount]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,13 +73,20 @@ export default function LandingPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex items-center justify-center text-center px-6">
         <div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">🎉 You're on the Waitlist!</h1>
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+            🎉 You're on the Waitlist!
+          </h1>
           <p className="text-lg text-gray-700 mb-6">
-            You’ll be among the first to experience TimeRich — the AI planner that helps you live with purpose.
+            You’ll be among the first to experience TimeRich — the AI planner
+            that helps you live with purpose.
           </p>
 
-          <p className="text-md font-medium text-gray-800 mb-2">Want early access sooner?</p>
-          <p className="text-gray-600 mb-6">Share TimeRich with your friends:</p>
+          <p className="text-md font-medium text-gray-800 mb-2">
+            Want early access sooner?
+          </p>
+          <p className="text-gray-600 mb-6">
+            Share TimeRich with your friends:
+          </p>
 
           <div className="flex justify-center flex-wrap gap-4 mb-6">
             <a
@@ -94,7 +124,9 @@ export default function LandingPage() {
             </a>
           </div>
 
-          <p className="text-sm text-gray-500">Thank you for supporting TimeRich. We’ll be in touch soon!</p>
+          <p className="text-sm text-gray-500">
+            Thank you for supporting TimeRich. We’ll be in touch soon!
+          </p>
         </div>
       </div>
     );
@@ -107,13 +139,13 @@ export default function LandingPage() {
           TimeRich
         </h1>
         <p className="text-xl text-gray-700 mb-6">
-          Become the master of your time with AI. TimeRich helps you build your ideal week,
-          avoid burnout, and live with purpose.
+          Become the master of your time with AI. TimeRich helps you build your
+          ideal week, avoid burnout, and live with purpose.
         </p>
 
         {waitlistCount !== null ? (
           <p className="text-gray-500 mb-4 text-sm">
-            🎉 <span className="font-medium">{waitlistCount}</span> people have already joined the waitlist!
+            🎉 <span className="font-medium">{animatedCount}</span> people have already joined the waitlist!
           </p>
         ) : (
           <p className="text-gray-400 mb-4 text-sm italic">Loading waitlist size...</p>
@@ -140,7 +172,9 @@ export default function LandingPage() {
         </form>
 
         {status === "error" && (
-          <p className="text-red-500 font-medium">Something went wrong. Please try again.</p>
+          <p className="text-red-500 font-medium">
+            Something went wrong. Please try again.
+          </p>
         )}
       </div>
     </div>
