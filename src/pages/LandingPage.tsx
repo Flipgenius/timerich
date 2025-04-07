@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   collection,
   addDoc,
@@ -6,44 +6,20 @@ import {
   getCountFromServer,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import CountUp from "react-countup";
 
 export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null);
-  const [animatedCount, setAnimatedCount] = useState<number>(0);
-  const animationFrame = useRef<number>();
 
   useEffect(() => {
     const fetchCount = async () => {
       const snapshot = await getCountFromServer(collection(db, "waitlist"));
-      const count = snapshot.data().count;
-      setWaitlistCount(count);
+      setWaitlistCount(snapshot.data().count);
     };
     fetchCount();
   }, []);
-
-  useEffect(() => {
-    if (waitlistCount !== null) {
-      const duration = 1200;
-      const startTime = performance.now();
-
-      const animate = (currentTime: number) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const current = Math.floor(progress * waitlistCount);
-        setAnimatedCount(current);
-        console.log("Animating count:", current);
-        if (progress < 1) {
-          animationFrame.current = requestAnimationFrame(animate);
-        }
-      };
-
-      animationFrame.current = requestAnimationFrame(animate);
-
-      return () => cancelAnimationFrame(animationFrame.current!);
-    }
-  }, [waitlistCount]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,8 +120,10 @@ export default function LandingPage() {
         {waitlistCount !== null ? (
           <p className="text-gray-500 mb-4 text-sm">
             🎉{" "}
-            <span className="font-medium">{animatedCount}</span> people have
-            already joined the waitlist!
+            <span className="font-medium">
+              <CountUp end={waitlistCount} duration={1.5} />
+            </span>{" "}
+            people have already joined the waitlist!
           </p>
         ) : (
           <p className="text-gray-400 mb-4 text-sm italic">
