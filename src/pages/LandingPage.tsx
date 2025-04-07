@@ -16,7 +16,8 @@ export default function LandingPage() {
   useEffect(() => {
     const fetchCount = async () => {
       const snapshot = await getCountFromServer(collection(db, "waitlist"));
-      setWaitlistCount(snapshot.data().count);
+      const count = snapshot.data().count;
+      setWaitlistCount(count);
     };
     fetchCount();
   }, []);
@@ -121,7 +122,7 @@ export default function LandingPage() {
           <p className="text-gray-500 mb-4 text-sm">
             🎉{" "}
             <span className="font-medium">
-              <CountUp end={waitlistCount} duration={1.5} />
+              <CountUp key={waitlistCount} end={waitlistCount} duration={1.5} />
             </span>{" "}
             people have already joined the waitlist!
           </p>
