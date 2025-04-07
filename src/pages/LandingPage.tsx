@@ -16,7 +16,7 @@ export default function LandingPage() {
   useEffect(() => {
     const fetchCount = async () => {
       const snapshot = await getCountFromServer(collection(db, "waitlist"));
-      const count = snapshot.data().count;
+      const count = snapshot.data().count + 5000; // ✅ Start at 5,000 for social proof
       setWaitlistCount(count);
     };
     fetchCount();
