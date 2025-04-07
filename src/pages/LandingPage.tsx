@@ -25,34 +25,23 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (waitlistCount !== null) {
-      let startTime: number;
-      const duration = 1000;
+      const duration = 1200;
+      const startTime = performance.now();
 
-      const startAnimation = () => {
-        startTime = performance.now();
-
-        const animate = (time: number) => {
-          const elapsed = time - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          const current = Math.floor(progress * waitlistCount);
-          setAnimatedCount(current);
-          if (progress < 1) {
-            animationFrame.current = requestAnimationFrame(animate);
-          }
-        };
-
-        animationFrame.current = requestAnimationFrame(animate);
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const current = Math.floor(progress * waitlistCount);
+        setAnimatedCount(current);
+        console.log("Animating count:", current);
+        if (progress < 1) {
+          animationFrame.current = requestAnimationFrame(animate);
+        }
       };
 
-      // ✅ Wait 300ms before animating
-      const timeout = setTimeout(() => {
-        startAnimation();
-      }, 300);
+      animationFrame.current = requestAnimationFrame(animate);
 
-      return () => {
-        clearTimeout(timeout);
-        cancelAnimationFrame(animationFrame.current!);
-      };
+      return () => cancelAnimationFrame(animationFrame.current!);
     }
   }, [waitlistCount]);
 
@@ -154,7 +143,9 @@ export default function LandingPage() {
 
         {waitlistCount !== null ? (
           <p className="text-gray-500 mb-4 text-sm">
-            🎉 <span className="font-medium">{animatedCount}</span> people have already joined the waitlist!
+            🎉{" "}
+            <span className="font-medium">{animatedCount}</span> people have
+            already joined the waitlist!
           </p>
         ) : (
           <p className="text-gray-400 mb-4 text-sm italic">
