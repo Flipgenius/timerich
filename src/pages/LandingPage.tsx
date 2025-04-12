@@ -16,7 +16,7 @@ export default function LandingPage() {
   useEffect(() => {
     const fetchCount = async () => {
       const snapshot = await getCountFromServer(collection(db, "waitlist"));
-      const count = snapshot.data().count + 5000; // ✅ Start at 5,000 for social proof
+      const count = snapshot.data().count + 5000; // start with social proof
       setWaitlistCount(count);
     };
     fetchCount();
@@ -46,7 +46,7 @@ export default function LandingPage() {
     const shareUrl = encodeURIComponent("https://usetimerich.com");
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex items-center justify-center text-center px-6">
+      <div className="min-h-screen bg-white flex items-center justify-center text-center px-6">
         <div>
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
             🎉 You're on the Waitlist!
@@ -108,56 +108,56 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 flex flex-col justify-center items-center px-6">
-      <div className="text-center max-w-2xl">
-        <h1 className="text-5xl font-extrabold text-gray-900 leading-tight mb-6">
-          TimeRich
-        </h1>
-        <p className="text-xl text-gray-700 mb-6">
-          Become the master of your time with AI. TimeRich helps you build your
-          ideal week, avoid burnout, and live with purpose.
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex flex-col items-center justify-center px-6 py-12 text-center">
+      <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">
+        Master Your Time with AI
+      </h1>
+      <p className="text-lg text-gray-700 max-w-xl mb-8">
+        TimeRich helps you design your ideal week, avoid burnout, and live every day
+        with purpose. Powered by AI. Guided by your values.
+      </p>
+
+      <ul className="text-left text-gray-700 mb-8 max-w-md space-y-2">
+        <li>✅ Get a personalized daily plan in seconds</li>
+        <li>✅ Align your schedule with your faith, family, and purpose</li>
+        <li>✅ Detect burnout early and reclaim your peace</li>
+      </ul>
+
+      {waitlistCount !== null && (
+        <p className="text-gray-500 mb-4 text-sm">
+          🎉{" "}
+          <span className="font-medium">
+            <CountUp key={waitlistCount} end={waitlistCount} duration={1.5} />
+          </span>{" "}
+          people have already joined the waitlist!
         </p>
+      )}
 
-        {waitlistCount !== null ? (
-          <p className="text-gray-500 mb-4 text-sm">
-            🎉{" "}
-            <span className="font-medium">
-              <CountUp key={waitlistCount} end={waitlistCount} duration={1.5} />
-            </span>{" "}
-            people have already joined the waitlist!
-          </p>
-        ) : (
-          <p className="text-gray-400 mb-4 text-sm italic">
-            Loading waitlist size...
-          </p>
-        )}
-
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-md mx-auto flex flex-col sm:flex-row gap-4 mb-4"
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md mx-auto flex flex-col sm:flex-row gap-4 mb-6"
+      >
+        <input
+          type="email"
+          value={email}
+          required
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          className="flex-1 p-3 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-6 py-3 rounded font-semibold hover:bg-blue-700 transition"
         >
-          <input
-            type="email"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="flex-1 p-3 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-3 rounded font-semibold hover:bg-blue-700 transition"
-          >
-            Join the Waitlist
-          </button>
-        </form>
+          Join the Waitlist
+        </button>
+      </form>
 
-        {status === "error" && (
-          <p className="text-red-500 font-medium">
-            Something went wrong. Please try again.
-          </p>
-        )}
-      </div>
+      {status === "error" && (
+        <p className="text-red-500 font-medium">Something went wrong. Try again.</p>
+      )}
+
+      <p className="text-sm text-gray-400">You were made for more than a busy calendar. Let's build your ideal week.</p>
     </div>
   );
 }
