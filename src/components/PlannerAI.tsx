@@ -1,62 +1,76 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { auth } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { getTodayAlignment } from "../utils/getTodayAlignment";
 import { savePlanToFirestore } from "../utils/savePlanToFirestore";
 
 export default function PlannerAI() {
-  const [input, setInput] = useState("Design my ideal day based on focus, health, and rest.");
+  const [input, setInput] = useState(
+    "Design my ideal day based on focus, health, and rest."
+  );
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [user] = useAuthState(auth);
+  const [alignment, setAlignment] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      getTodayAlignment(user.uid).then((value) => setAlignment(value));
+    }
+  }, [user]);
 
   const generatePlan = async () => {
     setLoading(true);
     setOutput("");
 
-    try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a productivity coach. Create a clear, motivating daily schedule with time blocks based on the user's goals.",
-            },
-            {
-              role: "user",
-              content: input,
-            },
-          ],
-          temperature: 0.7,
-        }),
-      });
+    const alignmentNote = alignment
+      ? ` My personal focus today is: ${alignment}.`
+      : "";
 
-      console.log("OpenAI API response:", response);
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_OPENAI_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a compassionate and intentional AI planning assistant. You help people create meaningful, value-driven daily schedules.",
+          },
+          {
+            role: "user",
+            content: input + alignmentNote,
+          },
+        ],
+        temperature: 0.7,
+      }),
+    });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("❌ Full OpenAI Error Response:", errorText);
-        throw new Error("OpenAI request failed.");
-      }
+    const data = await response.json();
+    const plan = data.choices?.[0]?.message?.content || "Something went wrong.";
+    setOutput(plan);
 
-      const data = await response.json();
-      const plan = data.choices?.[0]?.message?.content || "Something went wrong.";
-      setOutput(plan);
-      savePlanToFirestore(input, plan);
-    } catch (error) {
-      console.error("❌ OpenAI API Error:", error);
-      setOutput("Something went wrong.");
+    if (user) {
+      savePlanToFirestore(input + alignmentNote, plan);
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow rounded-lg p-6">
+    <div className="bg-white shadow rounded-lg p-6 mb-6">
       <h2 className="text-2xl font-bold mb-4">AI-Powered Daily Planner</h2>
+
+      {alignment && (
+        <p className="text-sm text-gray-600 mb-2">
+          ✨ Today’s focus: <span className="font-medium">{alignment}</span>
+        </p>
+      )}
+
       <textarea
         className="w-full p-3 border rounded mb-4"
         rows={4}
@@ -67,7 +81,7 @@ export default function PlannerAI() {
       <button
         onClick={generatePlan}
         disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
       >
         {loading ? "Generating..." : "Generate My Day Plan"}
       </button>
