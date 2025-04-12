@@ -8,3 +8,4 @@ export default defineConfig({
     historyApiFallback: true, // 👈 Enable React Router fallback for Vercel
   }
 })
+
