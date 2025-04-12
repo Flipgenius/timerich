@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import Planner from "./pages/Planner";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -12,7 +12,7 @@ export default function App() {
   const [user] = useAuthState(auth);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="min-h-screen bg-gray-100">
         <Navbar />
         <Routes>
@@ -23,6 +23,6 @@ export default function App() {
           <Route path="/login" element={<Login />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
