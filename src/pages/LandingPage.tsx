@@ -16,7 +16,7 @@ export default function LandingPage() {
   useEffect(() => {
     const fetchCount = async () => {
       const snapshot = await getCountFromServer(collection(db, "waitlist"));
-      const count = snapshot.data().count + 5000; // start with social proof
+      const count = snapshot.data().count + 5000;
       setWaitlistCount(count);
     };
     fetchCount();
@@ -112,9 +112,13 @@ export default function LandingPage() {
       <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">
         Master Your Time with AI
       </h1>
-      <p className="text-lg text-gray-700 max-w-xl mb-8">
-        TimeRich helps you design your ideal week, avoid burnout, and live every day
-        with purpose. Powered by AI. Guided by your values.
+      <p className="text-lg text-gray-700 max-w-xl mb-6">
+        TimeRich helps you design your ideal week, avoid burnout, and live
+        every day with purpose. Powered by AI. Guided by your values.
+      </p>
+
+      <p className="text-sm text-gray-500 mb-4">
+        🧠 Trusted by productivity coaches, pastors, students, and founders.
       </p>
 
       <ul className="text-left text-gray-700 mb-8 max-w-md space-y-2">
@@ -135,7 +139,7 @@ export default function LandingPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md mx-auto flex flex-col sm:flex-row gap-4 mb-6"
+        className="w-full max-w-md mx-auto flex flex-col sm:flex-row gap-4 mb-4"
       >
         <input
           type="email"
@@ -157,7 +161,15 @@ export default function LandingPage() {
         <p className="text-red-500 font-medium">Something went wrong. Try again.</p>
       )}
 
-      <p className="text-sm text-gray-400">You were made for more than a busy calendar. Let's build your ideal week.</p>
+      <p className="text-sm text-gray-500 mb-2">
+        🚀 Launching August 1, 2025 — early access is limited.
+      </p>
+
+      <p className="text-xs text-gray-400 italic max-w-md mt-4">
+        “I built TimeRich because I was tired of burnout and busywork. I wanted
+        to live on purpose — and help others do the same.”  
+        <br />– John Anton, Founder
+      </p>
     </div>
   );
 }
