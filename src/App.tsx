@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Reports from "./pages/Reports";
 import LandingPage from "./pages/LandingPage";
+import Upgrade from "./pages/Upgrade";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -15,7 +16,7 @@ export default function App() {
   return (
     <HashRouter>
       <Routes>
-        {/* Public route */}
+        {/* Public landing page */}
         <Route
           path="/"
           element={user ? <Layout><Dashboard /></Layout> : <LandingPage />}
@@ -46,8 +47,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/upgrade"
+          element={
+            <ProtectedRoute>
+              <Layout><Upgrade /></Layout>
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Unwrapped routes */}
+        {/* Login (not protected) */}
         <Route path="/login" element={<Login />} />
       </Routes>
     </HashRouter>
