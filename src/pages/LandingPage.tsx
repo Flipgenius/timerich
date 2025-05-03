@@ -1,3 +1,4 @@
+import CountdownTimer from "../components/CountdownTimer";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -110,12 +111,15 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex flex-col items-center justify-center px-6 py-12 text-center">
       <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">
-        Master Your Time with AI
-      </h1>
-      <p className="text-lg text-gray-700 max-w-xl mb-6">
-        TimeRich helps you design your ideal week, avoid burnout, and live
-        every day with purpose. Powered by AI. Guided by your values.
-      </p>
+  Master Your Time with AI
+</h1>
+
+<CountdownTimer />
+
+<p className="text-lg text-gray-700 max-w-xl mb-6">
+  TimeRich helps you design your ideal week, avoid burnout, and live every day
+  with purpose. Powered by AI. Guided by your values.
+</p>
 
       <p className="text-sm text-gray-500 mb-4">
         🧠 Trusted by productivity coaches, pastors, students, and founders.
