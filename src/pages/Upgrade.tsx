@@ -10,6 +10,7 @@ export default function Upgrade() {
   const handleCheckout = async (priceId: string) => {
     setLoading(true);
     const stripe = await stripePromise;
+console.log("Stripe:", stripe);
     if (!stripe) {
       alert("Stripe failed to load.");
       return;
