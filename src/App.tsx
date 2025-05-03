@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Reports from "./pages/Reports";
 import LandingPage from "./pages/LandingPage";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
   const [user] = useAuthState(auth);
@@ -23,15 +24,27 @@ export default function App() {
         {/* Authenticated routes */}
         <Route
           path="/dashboard"
-          element={<Layout><Dashboard /></Layout>}
+          element={
+            <ProtectedRoute>
+              <Layout><Dashboard /></Layout>
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/planner"
-          element={<Layout><Planner /></Layout>}
+          element={
+            <ProtectedRoute>
+              <Layout><Planner /></Layout>
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/reports"
-          element={<Layout><Reports /></Layout>}
+          element={
+            <ProtectedRoute>
+              <Layout><Reports /></Layout>
+            </ProtectedRoute>
+          }
         />
 
         {/* Unwrapped routes */}
@@ -40,4 +53,3 @@ export default function App() {
     </HashRouter>
   );
 }
-
